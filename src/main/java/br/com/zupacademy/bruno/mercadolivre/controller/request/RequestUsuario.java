@@ -10,11 +10,13 @@ import javax.validation.constraints.Size;
 
 import br.com.zupacademy.bruno.mercadolivre.controller.model.Usuario;
 import br.com.zupacademy.bruno.mercadolivre.controller.utils.SenhaValida;
+import br.com.zupacademy.bruno.mercadolivre.controller.utils.annotations.UniqueValue;
 
 public class RequestUsuario {
 	
 	@NotBlank
 	@Email 
+	@UniqueValue(domainClass = Usuario.class, fieldName = "login", message = "Já existe um usuário com este login cadastrado no sistema.")
 	private String login;
 
 	@NotBlank
