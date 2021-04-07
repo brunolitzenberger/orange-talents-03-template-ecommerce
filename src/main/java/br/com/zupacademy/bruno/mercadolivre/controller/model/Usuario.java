@@ -2,7 +2,6 @@ package br.com.zupacademy.bruno.mercadolivre.controller.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,17 +12,22 @@ import br.com.zupacademy.bruno.mercadolivre.controller.utils.SenhaValida;
 
 @Entity
 public class Usuario {
-	
+
+
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(nullable = false)
+
 	private String login;
-	@Column(nullable = false)
+	
 	private String senha;
-	@Column(nullable = false)
+	
 	private LocalDateTime instante;
+	
+	@Deprecated
+	public Usuario() {
+		
+	}
 
 	public Usuario(String login, @Valid SenhaValida senha, LocalDateTime instante) {
 		this.login = login;
@@ -46,6 +50,13 @@ public class Usuario {
 	public LocalDateTime getInstante() {
 		return instante;
 	}
+
+
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", login=" + login + ", senha=" + senha + ", instante=" + instante + "]";
+	}
+
 	
 	
 
