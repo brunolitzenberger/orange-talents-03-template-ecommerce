@@ -18,7 +18,7 @@ public class Categoria {
 	private String nome;
 	
 	@ManyToOne
-	private Categoria categoria;
+	private Categoria categoriaMae;
 	
 	@Deprecated
 	public Categoria() {
@@ -41,16 +41,16 @@ public class Categoria {
 	}
 
 	public Categoria getCategoria() {
-		return categoria;
+		return categoriaMae;
 	}
 
 	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
+		this.categoriaMae = categoria;
 	}
 
 	@Override
 	public String toString() {
-		return "Categoria [id=" + id + ", nome=" + nome + ", categoria=" + categoria + "]";
+		return "Categoria [id=" + id + ", nome=" + nome + ", categoriaMae=" + categoriaMae + "]";
 	}
 	
 	

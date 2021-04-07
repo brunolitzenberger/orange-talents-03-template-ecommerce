@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -42,11 +43,28 @@ public class ConfiguracoesDeSeguranca extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(authenticationService).passwordEncoder(new BCryptPasswordEncoder());
 	}
 	
+	private static final String[] PUBLIC_MATCHERS = {
+		"/h2/**",
+		"/login"
+	};
+	
+	private static final String[] PUBLIC_MATCHERS_GET = {
+			"/produtos",
+			"/categorias"
+	};
+	
+	private static final String[] PUBLIC_MATCHERS_POST = {
+		"/usuario",
+		"/produtos"
+	};
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
 		http.headers().frameOptions().sameOrigin();
-		http.authorizeRequests().antMatchers("/**").permitAll()
+		http.authorizeRequests()
+		.antMatchers(PUBLIC_MATCHERS).permitAll()
+		.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
+		.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
 		.anyRequest().authenticated()
 		.and().csrf().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

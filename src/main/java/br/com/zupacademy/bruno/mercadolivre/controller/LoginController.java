@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.zupacademy.bruno.mercadolivre.controller.request.LoginRequest;
+import br.com.zupacademy.bruno.mercadolivre.controller.request.RequestLogin;
 import br.com.zupacademy.bruno.mercadolivre.controller.response.TokenResponse;
 import br.com.zupacademy.bruno.mercadolivre.security.JWTService;
 
@@ -32,14 +32,15 @@ public class LoginController {
 
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody @Valid LoginRequest request){
+	public ResponseEntity<?> login(@RequestBody @Valid RequestLogin request){
 		UsernamePasswordAuthenticationToken login = request.converter();
 		try {
 			Authentication authentication = authenticationManager.authenticate(login);
 			String token = jwtService.gerarToken(authentication);
 			return ResponseEntity.ok().body(new TokenResponse(token));
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().build();
+			System.out.println();
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 	

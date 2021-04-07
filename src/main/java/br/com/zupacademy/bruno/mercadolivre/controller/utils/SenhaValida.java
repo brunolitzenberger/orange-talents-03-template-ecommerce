@@ -7,6 +7,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class SenhaValida {
 	
+	@NotBlank
+	@Size(min= 6)
 	private String senha;
 
 	public SenhaValida(@NotBlank @Size(min= 6) String senha) {

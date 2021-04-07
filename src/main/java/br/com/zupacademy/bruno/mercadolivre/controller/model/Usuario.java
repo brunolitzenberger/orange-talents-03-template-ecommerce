@@ -2,11 +2,14 @@ package br.com.zupacademy.bruno.mercadolivre.controller.model;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PastOrPresent;
 
 import br.com.zupacademy.bruno.mercadolivre.controller.utils.SenhaValida;
 
@@ -17,22 +20,25 @@ public class Usuario {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	private String login;
 	
+	@NotBlank
+	@Column(nullable = false, unique = true)
+	private String login;
+	@NotBlank
+	@Column(nullable = false)
 	private String senha;
 	
-	private LocalDateTime instante;
+	@PastOrPresent
+	private LocalDateTime instante = LocalDateTime.now();
 	
 	@Deprecated
 	public Usuario() {
 		
 	}
 
-	public Usuario(String login, @Valid SenhaValida senha, LocalDateTime instante) {
+	public Usuario(@NotBlank String login, @Valid SenhaValida senha) {
 		this.login = login;
 		this.senha = senha.hash();
-		this.instante = instante;
 	}
 
 	public Long getId() {
