@@ -59,6 +59,9 @@ public class Produto {
 	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "produto")
 	private Set<ImagemProduto> imagens = new HashSet<>();
 
+	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "produto")
+	private Set<OpiniaoProduto> opinioes = new HashSet<>();
+
 	@Deprecated
 	public Produto() {
 
@@ -105,15 +108,19 @@ public class Produto {
 
 	public Categoria getCategoria() {
 		return categoria;
+	}	
+	
+	public Set<OpiniaoProduto> getOpinioes() {
+		return opinioes;
 	}
 
 
-	
+
 	@Override
 	public String toString() {
 		return "Produto [id=" + id + ", nome=" + nome + ", valor=" + valor + ", quantidade=" + quantidade
 				+ ", descricao=" + descricao + ", usuario=" + usuario + ", categoria=" + categoria
-				+ ", caracteristicas=" + caracteristicas + ", imagens=" + imagens + "]";
+				+ ", caracteristicas=" + caracteristicas + ", imagens=" + imagens + ", opinioes=" + opinioes + "]";
 	}
 
 	public void addImagem(Set<String> links) {
@@ -124,6 +131,11 @@ public class Produto {
 
 	public boolean verificaUsuario(Usuario user) {
 		return this.usuario.equals(user);
+		
+	}
+
+	public void adicionaOpiniao(@Valid OpiniaoProduto opiniao) {
+		this.opinioes.add(opiniao);
 		
 	}
 
