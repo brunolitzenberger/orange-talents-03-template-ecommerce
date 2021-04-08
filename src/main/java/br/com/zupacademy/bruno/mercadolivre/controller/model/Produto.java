@@ -56,6 +56,9 @@ public class Produto {
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
 	private Set<ProdutoCaracteristica> caracteristicas = new HashSet<>();
 
+	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "produto")
+	private Set<ImagemProduto> imagens = new HashSet<>();
+
 	@Deprecated
 	public Produto() {
 
@@ -104,11 +107,24 @@ public class Produto {
 		return categoria;
 	}
 
+
+	
 	@Override
 	public String toString() {
 		return "Produto [id=" + id + ", nome=" + nome + ", valor=" + valor + ", quantidade=" + quantidade
 				+ ", descricao=" + descricao + ", usuario=" + usuario + ", categoria=" + categoria
-				+ ", caracteristicas=" + caracteristicas + "]";
+				+ ", caracteristicas=" + caracteristicas + ", imagens=" + imagens + "]";
+	}
+
+	public void addImagem(Set<String> links) {
+		Set<ImagemProduto> imagens = links.stream().map(link -> new ImagemProduto(this, link)).collect(Collectors.toSet());
+		this.imagens.addAll(imagens);
+		
+	}
+
+	public boolean verificaUsuario(Usuario user) {
+		return this.usuario.equals(user);
+		
 	}
 
 	

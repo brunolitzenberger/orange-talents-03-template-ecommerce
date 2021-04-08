@@ -1,6 +1,5 @@
 package br.com.zupacademy.bruno.mercadolivre.controller.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,39 +9,38 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.URL;
+
 @Entity
-public class ProdutoCaracteristica {
+public class ImagemProduto {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@NotBlank
-	@Column(nullable = false)
-	private String nome;
-	@NotBlank
-	@Column(nullable = false)
-	private String descricao;
+
 	@NotNull
 	@ManyToOne
+	@Valid
 	private Produto produto;
-
+	@URL
+	@NotBlank
+	private String link;
+	
 	@Deprecated
-	public ProdutoCaracteristica() {
+	public ImagemProduto() {
 		
 	}
 	
-	public ProdutoCaracteristica(@NotBlank String nome, @NotBlank String descricao, @NotNull @Valid Produto produto) {
-		this.nome = nome;
-		this.descricao = descricao;
+	public ImagemProduto(@NotNull @Valid Produto produto, @NotBlank String link) {
 		this.produto = produto;
+		this.link = link;
 	}
-
 
 	@Override
 	public String toString() {
-		return "ProdutoCaracteristica [id=" + id + ", nome=" + nome + ", descricao=" + descricao + "]";
+		return "ImagemProduto [id=" + id + ", link=" + link + "]";
 	}
 
 	
-
+	
 }
