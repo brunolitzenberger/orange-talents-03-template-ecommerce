@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import br.com.zupacademy.bruno.mercadolivre.controller.model.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,7 +20,7 @@ public class JWTService {
 	private Long expiration;
 	
 	public String gerarToken(Authentication authentication) {
-		DetalhesUsuarioService usuario = (DetalhesUsuarioService) authentication.getPrincipal();
+		Usuario usuario = (Usuario) authentication.getPrincipal();
 		return Jwts.builder()
 				.setIssuer("Desafio mercado livre")
 				.setSubject(usuario.getId().toString())

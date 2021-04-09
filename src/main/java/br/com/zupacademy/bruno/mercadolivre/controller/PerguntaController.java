@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,8 +35,7 @@ public class PerguntaController {
 		this.sender = sender;
 	}
 	
-
-	@PostMapping("/{produtoId}/pergunta")
+	@PostMapping("produtos/{produtoId}/pergunta")
 	@Transactional
 	public ResponseEntity<?> opiniao(@PathVariable(name = "produtoId") Long produtoId,
 			@RequestBody @Valid RequestPergunta request, Principal principal) {
@@ -44,13 +44,9 @@ public class PerguntaController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 					"Produto sobre o qual você quer perguntar não existe");
 		}
-		Usuario usuario = em.createQuery("SELECT u FROM Usuario u where u.login = :login", Usuario.class)
-				.setParameter("login", principal.getName()).getSingleResult();
-		if(usuario.equals(produto.getUsuario())) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Você não pode perguntar sobre seu próprio produto.");
-		}
+		Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		PerguntaProduto pergunta = request.toModel(usuario, produto);
-		produto.adicionaPergunta(pergunta);
+		produto.adicionaPergunta(pergunta, usuario);
 		em.merge(produto);
 		String sucesso = sender.sendEmail(produto, usuario);
 		return ResponseEntity.ok().body(sucesso);

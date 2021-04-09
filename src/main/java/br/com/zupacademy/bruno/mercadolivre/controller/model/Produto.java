@@ -3,7 +3,9 @@ package br.com.zupacademy.bruno.mercadolivre.controller.model;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.OptionalDouble;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
@@ -21,7 +23,9 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.com.zupacademy.bruno.mercadolivre.controller.request.RequestCaracteristica;
 
@@ -113,7 +117,6 @@ public class Produto {
 		return caracteristicas;
 	}
 
-
 	public Categoria getCategoria() {
 		return categoria;
 	}
@@ -121,31 +124,58 @@ public class Produto {
 	public Set<OpiniaoProduto> getOpinioes() {
 		return opinioes;
 	}
-
-	@Override
-	public String toString() {
-		return "Produto [id=" + id + ", nome=" + nome + ", valor=" + valor + ", quantidade=" + quantidade
-				+ ", descricao=" + descricao + ", usuario=" + usuario + ", categoria=" + categoria
-				+ ", caracteristicas=" + caracteristicas + ", imagens=" + imagens + ", opinioes=" + opinioes
-				+ ", perguntas=" + perguntas + "]";
+	
+	public Set<ImagemProduto> getImagens() {
+		return imagens;
 	}
 
-	public void addImagem(Set<String> links) {
+	public void addImagem(Set<String> links, Usuario user) {
+		if(!usuario.getUsername().equals(user.getUsername())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Você não pode adicionar imagens a um produto que não é seu.");
+		}
 		Set<ImagemProduto> imagens = links.stream().map(link -> new ImagemProduto(this, link))
 				.collect(Collectors.toSet());
 		this.imagens.addAll(imagens);
 
 	}
 
-
-	public void adicionaOpiniao(@Valid OpiniaoProduto opiniao) {
+	public void adicionaOpiniao(@Valid OpiniaoProduto opiniao, Usuario user) {
+		if(usuario.getUsername().equals(user.getUsername())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Você não pode opinar seu próprio produto.");
+		}
 		this.opinioes.add(opiniao);
 
 	}
 
-	public void adicionaPergunta(PerguntaProduto pergunta) {
+	public void adicionaPergunta(PerguntaProduto pergunta, Usuario user) {
+		if(usuario.getUsername().equals(user.getUsername())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Você não pode perguntar sobre seu próprio produto.");
+		}
 		this.perguntas.add(pergunta);
 
 	}
+	
+	public <T> Set<T> mapCaracteristicas(Function<ProdutoCaracteristica, T> mapper){
+		return this.caracteristicas.stream().map(mapper).collect(Collectors.toSet());
+	}
 
+	public <T> Set<T> mapPerguntas(Function<PerguntaProduto, T> mapper){
+		return this.perguntas.stream().map(mapper).collect(Collectors.toSet());
+	}
+	
+	public <T> Set<T> mapOpiniao(Function<OpiniaoProduto, T> mapper){
+		return this.opinioes.stream().map(mapper).collect(Collectors.toSet());
+	}
+	
+	public <T> Set<T> mapImagem(Function<ImagemProduto, T> mapper){
+		return this.imagens.stream().map(mapper).collect(Collectors.toSet());
+	}
+	
+	public int totalDeNotas() {
+		return opinioes.size();
+	}
+	
+	public OptionalDouble mediaNotas() {
+		return this.opinioes.stream().mapToInt(opiniao ->  opiniao.getNota()).average();
+	}
 }

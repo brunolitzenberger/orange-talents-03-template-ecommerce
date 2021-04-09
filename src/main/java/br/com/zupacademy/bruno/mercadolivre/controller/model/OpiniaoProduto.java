@@ -41,8 +41,6 @@ public class OpiniaoProduto {
 		
 	}
 
-
-
 	public OpiniaoProduto(@NotNull @Positive @Max(value = 5) Integer nota, @NotBlank String titulo,
 			@NotBlank @Size(max = 500) String descricao, @NotNull Usuario usuario, @NotNull Produto produto) {
 		super();
@@ -59,6 +57,30 @@ public class OpiniaoProduto {
 	public String toString() {
 		return "OpiniaoProduto [nota=" + nota + ", titulo=" + titulo + ", descricao=" + descricao + ", usuario="
 				+ usuario + "]";
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public Integer getNota() {
+		return nota;
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public Produto getProduto() {
+		return produto;
 	}
 
 

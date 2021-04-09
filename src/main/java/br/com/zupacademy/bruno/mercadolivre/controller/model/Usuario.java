@@ -1,6 +1,7 @@
 package br.com.zupacademy.bruno.mercadolivre.controller.model;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,16 +12,23 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import br.com.zupacademy.bruno.mercadolivre.controller.utils.SenhaValida;
 
 @Entity
-public class Usuario {
+public class Usuario implements UserDetails{
+
+
+	private static final long serialVersionUID = 1L;
 
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+
 	@NotBlank
 	@Column(nullable = false, unique = true)
 	private String login;
@@ -41,26 +49,52 @@ public class Usuario {
 		this.senha = senha.hash();
 	}
 
+
 	public Long getId() {
 		return id;
 	}
+	
 
-	public String getLogin() {
-		return login;
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public String getSenha() {
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
 		return senha;
 	}
 
-	public LocalDateTime getInstante() {
-		return instante;
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return login;
 	}
 
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 
 	@Override
-	public String toString() {
-		return "Usuario [id=" + id + ", login=" + login + ", senha=" + senha + ", instante=" + instante + "]";
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 	

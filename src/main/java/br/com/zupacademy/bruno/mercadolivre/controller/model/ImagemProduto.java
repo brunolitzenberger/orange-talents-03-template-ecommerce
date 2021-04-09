@@ -41,6 +41,19 @@ public class ImagemProduto {
 		return "ImagemProduto [id=" + id + ", link=" + link + "]";
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	
 	
 	
 }

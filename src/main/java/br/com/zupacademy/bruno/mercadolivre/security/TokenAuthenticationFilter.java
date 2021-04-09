@@ -38,9 +38,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
 	private void autenticarUsuario(String token) {
 		Usuario usuario = em.find(Usuario.class, jwtService.getUsuarioId(token));
-		DetalhesUsuarioService userDS = new DetalhesUsuarioService(usuario);
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDS, null,
-				userDS.getAuthorities());
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usuario, null,
+				usuario.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
