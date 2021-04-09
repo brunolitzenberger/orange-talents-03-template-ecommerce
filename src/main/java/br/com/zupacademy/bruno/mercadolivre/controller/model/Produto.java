@@ -62,6 +62,9 @@ public class Produto {
 	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "produto")
 	private Set<OpiniaoProduto> opinioes = new HashSet<>();
 
+	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "produto")
+	private Set<PerguntaProduto> perguntas = new HashSet<>();
+
 	@Deprecated
 	public Produto() {
 
@@ -69,7 +72,8 @@ public class Produto {
 
 	public Produto(@NotBlank String nome, @NotNull @Positive BigDecimal valor,
 			@NotNull @PositiveOrZero Integer quantidade, @NotBlank @Size(max = 1000) String descricao,
-			@Size(min = 3) @Valid Collection<RequestCaracteristica> caracteristicas, Categoria categoria, Usuario usuario) {
+			@Size(min = 3) @Valid Collection<RequestCaracteristica> caracteristicas, Categoria categoria,
+			Usuario usuario) {
 		this.nome = nome;
 		this.valor = valor;
 		this.quantidade = quantidade;
@@ -80,7 +84,6 @@ public class Produto {
 		Assert.isTrue(caracteristicas.size() >= 3, "Um produto precisa de no mínimo três características.");
 		this.usuario = usuario;
 	}
-
 
 	public Long getId() {
 		return id;
@@ -106,39 +109,43 @@ public class Produto {
 		return usuario;
 	}
 
-	public Categoria getCategoria() {
-		return categoria;
-	}	
-	
-	public Set<OpiniaoProduto> getOpinioes() {
-		return opinioes;
+	public Set<ProdutoCaracteristica> getCaracteristicas() {
+		return caracteristicas;
 	}
 
 
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public Set<OpiniaoProduto> getOpinioes() {
+		return opinioes;
+	}
 
 	@Override
 	public String toString() {
 		return "Produto [id=" + id + ", nome=" + nome + ", valor=" + valor + ", quantidade=" + quantidade
 				+ ", descricao=" + descricao + ", usuario=" + usuario + ", categoria=" + categoria
-				+ ", caracteristicas=" + caracteristicas + ", imagens=" + imagens + ", opinioes=" + opinioes + "]";
+				+ ", caracteristicas=" + caracteristicas + ", imagens=" + imagens + ", opinioes=" + opinioes
+				+ ", perguntas=" + perguntas + "]";
 	}
 
 	public void addImagem(Set<String> links) {
-		Set<ImagemProduto> imagens = links.stream().map(link -> new ImagemProduto(this, link)).collect(Collectors.toSet());
+		Set<ImagemProduto> imagens = links.stream().map(link -> new ImagemProduto(this, link))
+				.collect(Collectors.toSet());
 		this.imagens.addAll(imagens);
-		
+
 	}
 
-	public boolean verificaUsuario(Usuario user) {
-		return this.usuario.equals(user);
-		
-	}
 
 	public void adicionaOpiniao(@Valid OpiniaoProduto opiniao) {
 		this.opinioes.add(opiniao);
-		
+
 	}
 
-	
+	public void adicionaPergunta(PerguntaProduto pergunta) {
+		this.perguntas.add(pergunta);
+
+	}
 
 }

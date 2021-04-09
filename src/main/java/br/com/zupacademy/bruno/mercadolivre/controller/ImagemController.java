@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.zupacademy.bruno.mercadolivre.controller.model.Produto;
-import br.com.zupacademy.bruno.mercadolivre.controller.model.Usuario;
 import br.com.zupacademy.bruno.mercadolivre.controller.request.RequestImagem;
+import br.com.zupacademy.bruno.mercadolivre.controller.utils.SimuladorDeUpload;
 import br.com.zupacademy.bruno.mercadolivre.validator.ProibeImagensIguaisValidator;
 
 @RestController
@@ -50,13 +50,6 @@ public class ImagemController {
 		if(produto == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "O produto ao qual você quer adicionar imagens não existe");
 		}
-
-		Usuario usuario = em.createQuery("SELECT u FROM Usuario u where u.login = :login", Usuario.class).setParameter("login", principal.getName()).getSingleResult();
-		boolean mesmoUsuario = produto.verificaUsuario(usuario);
-		if(!mesmoUsuario) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não pode salvar imagens à um produto que não pertence a você.");
-		}
-		
 		Set<String> links = simuladorDeUpload.enviar(request.getImagens(), produto);
 		produto.addImagem(links);
 		em.merge(produto);

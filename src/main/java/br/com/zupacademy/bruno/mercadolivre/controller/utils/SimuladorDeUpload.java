@@ -1,4 +1,4 @@
-package br.com.zupacademy.bruno.mercadolivre.controller;
+package br.com.zupacademy.bruno.mercadolivre.controller.utils;
 
 import java.util.List;
 import java.util.Set;

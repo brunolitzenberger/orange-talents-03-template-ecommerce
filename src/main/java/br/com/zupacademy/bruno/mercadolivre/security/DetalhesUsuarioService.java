@@ -22,7 +22,6 @@ public class DetalhesUsuarioService implements UserDetails {
 	}
 
 	public DetalhesUsuarioService(Usuario usuario) {
-		super();
 		this.id = usuario.getId();
 		this.login = usuario.getLogin();
 		this.senha = usuario.getSenha();
@@ -66,7 +65,5 @@ public class DetalhesUsuarioService implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-	
-	
 
 }

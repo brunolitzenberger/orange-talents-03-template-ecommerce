@@ -1,7 +1,6 @@
 package br.com.zupacademy.bruno.mercadolivre.controller;
 
 import java.security.Principal;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,6 +27,8 @@ public class OpiniaoController {
 
 	@PersistenceContext
 	private EntityManager em;
+
+
 	
 	@PostMapping("/{produtoId}/opiniao")
 	@Transactional
@@ -37,9 +38,8 @@ public class OpiniaoController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto ao qual você quer opinar não existe");
 		}
 		Usuario usuario = em.createQuery("SELECT u FROM Usuario u where u.login = :login", Usuario.class).setParameter("login", principal.getName()).getSingleResult();
-		boolean mesmoUsuario = produto.verificaUsuario(usuario);
-		if(mesmoUsuario) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Você não pode opinar seu próprio produto.");
+		if(usuario.equals(produto.getUsuario())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Você não pode opinar sobre seu próprio produto.");
 		}
 		
 		OpiniaoProduto opiniao = request.toModel(usuario, produto);
