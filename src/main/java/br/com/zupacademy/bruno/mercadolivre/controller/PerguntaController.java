@@ -48,7 +48,7 @@ public class PerguntaController {
 		PerguntaProduto pergunta = request.toModel(usuario, produto);
 		produto.adicionaPergunta(pergunta, usuario);
 		em.merge(produto);
-		String sucesso = sender.sendEmail(produto, usuario);
+		String sucesso = sender.sendEmailPergunta(produto, usuario);
 		return ResponseEntity.ok().body(sucesso);
 	}
 

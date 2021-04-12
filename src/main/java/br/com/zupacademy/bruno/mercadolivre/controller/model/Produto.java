@@ -178,4 +178,17 @@ public class Produto {
 	public OptionalDouble mediaNotas() {
 		return this.opinioes.stream().mapToInt(opiniao ->  opiniao.getNota()).average();
 	}
+
+	public void abaterEstoque(@NotNull @Positive Integer quantidade) {
+		if(quantidade > this.quantidade) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O estoque do produto: " + this.quantidade + ", é menor que o pedido:" + quantidade);
+		}
+		this.quantidade -= quantidade;		
+	}
+	
+	public void validaUsuario(Usuario usuario) {
+		if(this.usuario.getUsername().equals(usuario.getUsername())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Você não pode comprar seu próprio produto.");
+		}
+	}
 }
