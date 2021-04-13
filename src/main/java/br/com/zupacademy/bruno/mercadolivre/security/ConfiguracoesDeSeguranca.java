@@ -50,12 +50,16 @@ public class ConfiguracoesDeSeguranca extends WebSecurityConfigurerAdapter {
 	
 	private static final String[] PUBLIC_MATCHERS_GET = {
 			"/produtos",
-			"/categorias"
+			"/categorias",
+			"/compra-pagseguro/{compraId}",
+			"/retorno-paypal/{compraId}",
 	};
 	
 	private static final String[] PUBLIC_MATCHERS_POST = {
 		"/usuario",
-		"/produtos"
+		"/produtos",
+		"/notas-fiscais",
+		"/ranking-vendedores"
 	};
 
 	@Override

@@ -30,7 +30,6 @@ public class UniqueValueValidator implements ConstraintValidator<UniqueValue, Ob
 		query.setParameter("value", value);
 		List<?> list = query.getResultList();
 		Assert.state(list.size() <= 1, "");
-		
 		return list.isEmpty();
 	}
 
